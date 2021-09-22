@@ -1,9 +1,6 @@
 import streamlit as st
 import cv2
 import numpy as np
-from PIL import Image
-from io import BytesIO
-import base64
 
 # Create application title and file uploader widget.
 st.title("OpenCV Deep Learning based Image Classification")
