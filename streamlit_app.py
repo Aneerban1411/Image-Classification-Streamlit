@@ -9,7 +9,6 @@ from io import BytesIO
 
 # Create application title and file uploader widget.
 st.title("OpenCV Deep Learning based Image Classification")
-mode = st.selectbox('Upload image from Disc or Web?', ('None', 'Disc', 'Web'))
 
 
 # Function for detecting facses in an image.
@@ -64,31 +63,33 @@ def load_model():
 
 net, class_names = load_model()
 
-if mode == 'Disc':
-    img_file_buffer = st.file_uploader("Choose a file", type=['jpg', 'jpeg', 'png'])
-    if img_file_buffer is not None:
-        # Read the file and convert it to opencv Image.
-        image = np.array(Image.open(img_file_buffer))
+
+img_file_buffer = st.file_uploader("Choose a file", type=['jpg', 'jpeg', 'png'])
+st.text('OR')
+url = st.text_input('Enter URL')
+
+if img_file_buffer is not None:
+    # Read the file and convert it to opencv Image.
+    image = np.array(Image.open(img_file_buffer))
+    st.image(image)
+
+    # Call the classification model to detect faces in the image.
+    detections = classify(net, image, class_names)
+
+    header(detections)
+
+
+elif url != '':
+    try:
+        response = requests.get(url)
+        image = Image.open(BytesIO(response.content))
         st.image(image)
 
         # Call the classification model to detect faces in the image.
         detections = classify(net, image, class_names)
 
         header(detections)
-elif mode == 'Web':
-    url = st.text_input('Enter URL')
-
-    if url != '':
-        try:
-            response = requests.get(url)
-            image = Image.open(BytesIO(response.content))
-            st.image(image)
-
-            # Call the classification model to detect faces in the image.
-            detections = classify(net, image, class_names)
-
-            header(detections)
-        except MissingSchema:
-            st.header('Invalid URL, Try Again!')
-        except UnidentifiedImageError:
-            st.header('URL has no Image, Try Again!')
+    except MissingSchema:
+        st.header('Invalid URL, Try Again!')
+    except UnidentifiedImageError:
+        st.header('URL has no Image, Try Again!')
