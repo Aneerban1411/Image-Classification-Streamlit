@@ -6,10 +6,8 @@ from PIL import Image, UnidentifiedImageError
 import requests
 from io import BytesIO
 
-
 # Create application title and file uploader widget.
 st.title("OpenCV Deep Learning based Image Classification")
-
 
 # Function for detecting facses in an image.
 def classify(model, image, class_names):
@@ -42,10 +40,6 @@ def classify(model, image, class_names):
 def header(text):
     st.markdown(f'<p style="background-color:#0066cc;color:#33ff33;font-size:24px;border-radius:2%;" align="center">{text}</p>', unsafe_allow_html=True)
 
-
-
-
-
 # Function to load the DNN model.
 @st.cache(allow_output_mutation=True)
 def load_model():
@@ -64,7 +58,7 @@ def load_model():
 net, class_names = load_model()
 
 
-img_file_buffer = st.file_uploader("Choose a file", type=['jpg', 'jpeg', 'png'])
+img_file_buffer = st.file_uploader("Choose a file or Camera", type=['jpg', 'jpeg', 'png'])
 st.text('OR')
 url = st.text_input('Enter URL')
 
